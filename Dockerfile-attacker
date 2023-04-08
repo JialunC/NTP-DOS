@@ -1,0 +1,5 @@
+FROM ubuntu:18.04
+RUN apt-get update && apt-get install -y tcpdump lsof ntpdate build-essential
+COPY ./ntp_dos.cpp /etc
+WORKDIR /etc
+RUN gcc ./ntpreflec.c -o ntpreflec -lpthread

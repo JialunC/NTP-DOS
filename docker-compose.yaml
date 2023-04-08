@@ -1,0 +1,43 @@
+version: '3.9'
+services:
+  victim:
+    container_name: victim
+    build:
+      context: .
+      dockerfile: Dockerfile-victim
+    tty: true
+    expose:
+      - '4000/udp'
+    networks:
+      network:
+        ipv4_address: 172.18.0.2
+    
+  attacker:
+    container_name: "attacker"
+    build:
+      context: .
+      dockerfile: Dockerfile-attacker
+    tty: true
+    networks:
+      network:
+        ipv4_address: 172.18.0.4
+
+  ntp:
+    container_name: "ntp"
+    tty: true
+    build:
+      context: .
+      dockerfile: Dockerfile-ntpd
+    expose:
+      - '123/udp'
+    networks:
+      network:
+        ipv4_address: 172.18.0.3
+
+networks:
+  network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: "172.18.0.0/24"
+          gateway: 172.18.0.1
